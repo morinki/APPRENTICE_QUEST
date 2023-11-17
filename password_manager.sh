@@ -1,5 +1,7 @@
 #!/bin/bash
 
+password_file="password_manager.txt.gpg"
+
 echo "パスワードマネージャーへようこそ！"
 while true; do
   read -p "次の選択肢から入力してください(Add Password/Get Password/Exit):" choise
@@ -11,10 +13,13 @@ while true; do
       read -s -p "パスワードを入力してください：" password
       echo  
       echo "$service_name:$user_name:$password" >> password_manager.txt
+      gpg -c password_manager.txt       #ファイルを暗号化
+      rm password_manager.txt       
       echo "パスワードの追加は成功しました"
       ;;
 
     "Get Password")
+      gpg -d $password_file > password.manager.txt #ファイルを複合化
       read -p "サービス名を入力してください：" service_name
       if grep -q "$service_name" password_manager.txt; then
         data=$(grep "$service_name" password_manager.txt)
@@ -25,6 +30,7 @@ while true; do
       else
         echo "そのサービスは登録されていません。"
       fi
+      rm password_manager.txt
       ;;
 
     "Exit")  
