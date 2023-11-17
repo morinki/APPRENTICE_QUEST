@@ -15,7 +15,16 @@ while true; do
       ;;
 
     "Get Password")
-      echo "入力確認、$choise"
+      read -p "サービス名を入力してください：" service_name
+      if grep -q "$service_name" password_manager.txt; then
+        data=$(grep "$service_name" password_manager.txt)
+        IFS=':' read -r get_service get_user get_password <<< "$data"
+        echo "サービス名：$get_service"
+        echo "ユーザー名：$get_user"
+        echo "パスワード：$get_password"
+      else
+        echo "そのサービスは登録されていません。"
+      fi
       ;;
 
     "Exit")  
